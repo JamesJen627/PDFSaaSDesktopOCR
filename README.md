@@ -1,69 +1,58 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="80" alt="Stirling PDF logo">
-</p>
+# PDFSaaS Desktop OCR
 
-<h1 align="center">Stirling PDF - The Open-Source PDF Platform</h1>
+基于 [Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF) 深度 fork 的二次开发项目，目标是构建**本地优先**的 PDF OCR 与双层可搜索 PDF 处理桌面应用。
 
-Stirling PDF is a powerful, open-source PDF editing platform. Run it as a personal desktop app, in the browser, or deploy it on your own servers with a private API. Edit, sign, redact, convert, and automate PDFs without sending documents to external services.
+## 项目来源
 
-<p align="center">
-  <a href="https://hub.docker.com/r/stirlingtools/stirling-pdf">
-    <img src="https://img.shields.io/docker/pulls/frooodle/s-pdf" alt="Docker Pulls">
-  </a>
-  <a href="https://discord.gg/HYmhKj45pU">
-    <img src="https://img.shields.io/discord/1068636748814483718?label=Discord" alt="Discord">
-  </a>
-  <a href="https://scorecard.dev/viewer/?uri=github.com/Stirling-Tools/Stirling-PDF">
-    <img src="https://api.scorecard.dev/projects/github.com/Stirling-Tools/Stirling-PDF/badge" alt="OpenSSF Scorecard">
-  </a>
-  <a href="https://github.com/Stirling-Tools/stirling-pdf">
-    <img src="https://img.shields.io/github/stars/stirling-tools/stirling-pdf?style=social" alt="GitHub Repo stars">
-  </a>
-</p>
+本仓库以 Stirling-PDF 为基底，保留其 PDF 解析、页面渲染、合并/拆分/压缩等基础能力，在此基础上扩展：
 
-![Stirling PDF - Dashboard](images/home-light.png)
+- 中文优先 OCR（PaddleOCR 主力，Tesseract 降级）
+- 图像预处理与布局分析（PP-Structure）
+- 双层 PDF 生成（扫描图层 + 可搜索文本层）
+- 批处理任务队列与 GPU 加速
+- **Electron** 桌面客户端（Windows 优先）
 
-## Key Capabilities
+架构模式为 **Fork + 强耦合扩展**，非插件式集成。产品需求见 `docs/PRDs/`，实施计划见 `docs/1_PLAN.md`。
 
-- **Everywhere you work** - Desktop client, browser UI, and self-hosted server with a private API.
-- **50+ PDF tools** - Edit, merge, split, sign, redact, convert, OCR, compress, and more.
-- **Automation & workflows** - No-code pipelines direct in UI with APIs to process millions of PDFs.
-- **Enterprise‑grade** - SSO, auditing, and flexible on‑prem deployments.
-- **Developer platform** - REST APIs available for nearly all tools to integrate into your existing systems.
-- **Global UI** - Interface available in 40+ languages.
+上游项目：
 
-For a full feature list, see the docs: **https://docs.stirlingpdf.com**
+- 仓库：https://github.com/Stirling-Tools/Stirling-PDF
+- 文档：https://docs.stirlingpdf.com
 
-## Quick Start
+## 概况
 
-```bash
-docker run -p 8080:8080 docker.stirlingpdf.com/stirlingtools/stirling-pdf
+| 项目 | 说明 |
+|------|------|
+| 定位 | 本地 Document AI：扫描 PDF → 可搜索、可复制、结构保留的输出 |
+| 桌面端 | Electron（`frontend/electron/`） |
+| 后端 | Stirling-PDF Java 服务 + Python OCR Service（规划中） |
+| 数据 | 默认完全本地处理，不上传 PDF |
+| 界面语言 | 简体中文、繁体中文、English（规划） |
+| 当前阶段 | Phase 0 已完成（Electron 脚手架与共享类型）；Phase 1 进行中 |
+
+## 目录（二开相关）
+
+```
+frontend/electron/     # Electron 桌面应用（OCR 产品线）
+docs/PRDs/             # 产品需求文档
+docs/1_PLAN.md         # Electron 壳实施计划
+app/                   # Stirling-PDF Java 后端（fork 修改）
+engine/                # 上游 AI Engine（与本 OCR 产品线独立）
 ```
 
-Then open: http://localhost:8080
+## 开发
 
-For full installation options (including desktop and Kubernetes), see our [Documentation Guide](https://docs.stirlingpdf.com/#documentation-guide).
+依赖 [Task](https://taskfile.dev/) 作为统一命令入口：
 
-## Resources
+```bash
+task install              # 安装依赖（含 electron）
+task electron:typecheck   # 校验 Electron 脚手架
+task electron:test        # Phase 0 单元测试
+task backend:dev          # 启动 Java 后端（:8080）
+```
 
-- [**Documentation**](https://docs.stirlingpdf.com)
-- [**Homepage**](https://stirling.com)
-- [**API Docs**](https://registry.scalar.com/@stirlingpdf/apis/stirling-pdf-processing-api/)
-- [**Server Plan & Enterprise**](https://docs.stirlingpdf.com/Paid-Offerings)
+Stirling-PDF 原有开发流程仍可用（`task dev`、`DeveloperGuide.md` 等），与本 OCR 桌面产品线并行存在。
 
-## Support
+## 许可证
 
-- **Community** [Discord](https://discord.gg/HYmhKj45pU)
-- **Bug Reports**: [Github issues](https://github.com/Stirling-Tools/Stirling-PDF/issues)
-
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-This project uses [Task](https://taskfile.dev/) as a unified command runner for all build, dev, and test commands. Run `task dev` to get started running the editor, run `task` to see the most common commands, or see the [Developer Guide](DeveloperGuide.md) for full details.
-
-For adding translations, see the [Translation Guide](devGuide/HowToAddNewLanguage.md).
-
-## License
-
-Stirling PDF is open-core. See [LICENSE](LICENSE) for details.
+本仓库继承 Stirling-PDF 的 open-core 结构：核心模块为 MIT，部分目录为专有许可。详见根目录 [LICENSE](LICENSE) 及各子目录 LICENSE 文件。
