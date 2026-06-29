@@ -1,0 +1,47 @@
+version: '3'
+
+vars:
+  ELECTRON_DIR: frontend/electron
+  TAURI_RUNTIME: frontend/editor/src-tauri/runtime/jre/release
+  TAURI_LIBS: frontend/editor/src-tauri/libs
+
+tasks:
+  install:
+    desc: "Install Electron package dependencies"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - npm install
+
+  typecheck:
+    desc: "Typecheck Electron shared types and main scaffolding"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - npm run typecheck
+
+  test:
+    desc: "Run Electron Phase 0 unit tests"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - npm test
+
+  # Phase 1D: copy jlink JRE + stirling-pdf JAR into frontend/electron/resources/
+  bundle-resources:
+    desc: "Copy bundled JRE and JAR into Electron resources (requires desktop:jlink)"
+    dir: .
+    cmds:
+      - cmd: powershell -NoProfile -Command "New-Item -ItemType Directory -Force -Path frontend/electron/resources/runtime, frontend/electron/resources/libs | Out-Null; if (Test-Path '{{.TAURI_RUNTIME}}') { Copy-Item -Recurse -Force '{{.TAURI_RUNTIME}}' 'frontend/electron/resources/runtime/jre' }; if (Test-Path '{{.TAURI_LIBS}}') { Copy-Item -Force '{{.TAURI_LIBS}}/stirling-pdf-*.jar' 'frontend/electron/resources/libs/' }"
+        platforms: [windows]
+      - cmd: mkdir -p frontend/electron/resources/runtime frontend/electron/resources/libs && ([ -d {{.TAURI_RUNTIME}} ] && cp -r {{.TAURI_RUNTIME}} frontend/electron/resources/runtime/jre || true) && ([ -d {{.TAURI_LIBS}} ] && cp {{.TAURI_LIBS}}/stirling-pdf-*.jar frontend/electron/resources/libs/ || true)
+        platforms: [linux, darwin]
+
+  dev:
+    desc: "Start Electron app (Phase 1 — not yet implemented)"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - echo "Electron dev shell lands in Phase 1D. Run task electron:typecheck to verify Phase 0 scaffold."
+
+  build:
+    desc: "Build Electron app for Windows (Phase 1 — not yet implemented)"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - echo "Electron production build lands in Phase 1D. Run task electron:bundle-resources after desktop:jlink."

@@ -1,0 +1,22 @@
+# Phase 0 stub — full Windows NSIS config in Phase 1D.
+appId: com.pdfsaas.desktop-ocr
+productName: PDFSaaS Desktop OCR
+directories:
+  output: release
+  buildResources: build
+extraResources:
+  - from: resources/runtime
+    to: runtime
+    filter:
+      - "**/*"
+  - from: resources/libs
+    to: libs
+    filter:
+      - "**/*"
+  - from: resources/ocr-service
+    to: ocr-service
+    filter:
+      - "**/*"
+win:
+  target:
+    - nsis
