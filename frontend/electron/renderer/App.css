@@ -1,0 +1,277 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  line-height: 1.5;
+  background: #0f1419;
+  color: #e7ecf1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.header h1 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+
+.header p {
+  margin: 0;
+  color: #9aa7b5;
+}
+
+.panel {
+  background: #171d24;
+  border: 1px solid #2a3440;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #3d4d61;
+  background: #243041;
+  color: inherit;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2c3a4d;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.backend-url {
+  font-family: Consolas, monospace;
+  word-break: break-all;
+  color: #8fd3ff;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.service-card {
+  border: 1px solid #2a3440;
+  border-radius: 10px;
+  padding: 12px;
+  background: #121820;
+}
+
+.service-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.status-healthy {
+  background: #1f4d36;
+  color: #9ef0bf;
+}
+
+.status-starting,
+.status-idle {
+  background: #4d4a1f;
+  color: #f0e59e;
+}
+
+.status-unhealthy,
+.status-crashed {
+  background: #4d1f1f;
+  color: #f0a0a0;
+}
+
+.status-stopped {
+  background: #333;
+  color: #bbb;
+}
+
+.ocr-lang-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ocr-lang-label {
+  color: #9aa7b5;
+  font-size: 0.9rem;
+}
+
+.ocr-lang-hint {
+  color: #7d8a98;
+  font-size: 0.85rem;
+}
+
+.ocr-lang-toggle {
+  display: inline-flex;
+  border: 1px solid #3d4d61;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ocr-lang-toggle button {
+  border: none;
+  border-radius: 0;
+  background: #1b2430;
+  padding: 6px 12px;
+}
+
+.ocr-lang-toggle button + button {
+  border-left: 1px solid #3d4d61;
+}
+
+.ocr-lang-toggle button.is-active {
+  background: #2f6fed;
+  border-color: #2f6fed;
+}
+
+.ocr-lang-toggle button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.meta {
+  display: grid;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: #b8c2cc;
+}
+
+.error-text {
+  color: #ff9d9d;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.task-log {
+  max-height: 280px;
+  overflow: auto;
+  border: 1px solid #2a3440;
+  border-radius: 8px;
+}
+
+.task-log table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.task-log th,
+.task-log td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #243041;
+  text-align: left;
+}
+
+.task-log th {
+  position: sticky;
+  top: 0;
+  background: #171d24;
+}
+
+.task-history {
+  max-height: 320px;
+}
+
+.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.task-actions button {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+}
+
+.empty {
+  color: #8b98a5;
+  padding: 16px;
+}
+
+.banner-error {
+  background: #3a1f1f;
+  border: 1px solid #7a3030;
+  color: #ffc9c9;
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+
+.ocr-result {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ocr-text {
+  margin: 0;
+  padding: 12px;
+  background: #0f1419;
+  border: 1px solid #2a3440;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow: auto;
+  font-size: 0.875rem;
+}

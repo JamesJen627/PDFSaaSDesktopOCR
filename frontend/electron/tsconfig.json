@@ -13,5 +13,4 @@
     "types": ["node"]
   },
   "include": ["shared/**/*.ts", "main/**/*.ts", "preload/**/*.ts"],
-  "exclude": ["node_modules", "dist", "renderer"]
 }

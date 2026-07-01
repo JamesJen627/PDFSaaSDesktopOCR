@@ -25,6 +25,9 @@ includes:
   electron:
     taskfile: .taskfiles/electron.yml
     dir: .
+  ocr:
+    taskfile: .taskfiles/ocr.yml
+    dir: .
   e2e:
     taskfile: .taskfiles/e2e.yml
     dir: .
@@ -49,6 +52,7 @@ tasks:
         echo "  task frontend:dev   Start frontend on default port"
         echo "  task desktop:dev    Start desktop app"
         echo "  task electron:dev   Start PDFSaaS Electron app (OCR desktop)"
+        echo "  task ocr:dev        Start PaddleOCR service on :5002"
         echo "  task check          Quality gate (lint, typecheck, test, etc.)"
 
   # ============================================================
@@ -61,6 +65,7 @@ tasks:
       - task: frontend:install
       - task: engine:install
       - task: electron:install
+      - task: ocr:install
 
   # ============================================================
   # Development

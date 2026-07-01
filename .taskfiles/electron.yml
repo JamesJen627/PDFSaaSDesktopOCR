@@ -9,8 +9,24 @@ tasks:
   install:
     desc: "Install Electron package dependencies"
     dir: '{{.ELECTRON_DIR}}'
+    env:
+      ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
     cmds:
       - npm install
+
+  repair:
+    desc: "Fix broken Electron binary (missing path.txt / dist)"
+    dir: '{{.ELECTRON_DIR}}'
+    env:
+      ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
+    cmds:
+      - npm run electron:repair
+
+  start:
+    desc: "Build and launch Electron shell"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - npm start
 
   typecheck:
     desc: "Typecheck Electron shared types and main scaffolding"
@@ -19,29 +35,48 @@ tasks:
       - npm run typecheck
 
   test:
-    desc: "Run Electron Phase 0 unit tests"
+    desc: "Run Electron unit tests"
     dir: '{{.ELECTRON_DIR}}'
     cmds:
       - npm test
 
-  # Phase 1D: copy jlink JRE + stirling-pdf JAR into frontend/electron/resources/
+  check:
+    desc: "Typecheck and test Electron package"
+    dir: '{{.ELECTRON_DIR}}'
+    cmds:
+      - npm run typecheck
+      - npm test
+
   bundle-resources:
     desc: "Copy bundled JRE and JAR into Electron resources (requires desktop:jlink)"
     dir: .
     cmds:
-      - cmd: powershell -NoProfile -Command "New-Item -ItemType Directory -Force -Path frontend/electron/resources/runtime, frontend/electron/resources/libs | Out-Null; if (Test-Path '{{.TAURI_RUNTIME}}') { Copy-Item -Recurse -Force '{{.TAURI_RUNTIME}}' 'frontend/electron/resources/runtime/jre' }; if (Test-Path '{{.TAURI_LIBS}}') { Copy-Item -Force '{{.TAURI_LIBS}}/stirling-pdf-*.jar' 'frontend/electron/resources/libs/' }"
+      - cmd: powershell -NoProfile -Command "$ErrorActionPreference='Stop'; New-Item -ItemType Directory -Force -Path frontend/electron/resources/runtime, frontend/electron/resources/libs, frontend/electron/resources/ocr-service | Out-Null; if (Test-Path '{{.TAURI_RUNTIME}}') { if (Test-Path 'frontend/electron/resources/runtime/jre') { Remove-Item -Recurse -Force 'frontend/electron/resources/runtime/jre' }; Copy-Item -Recurse -Force '{{.TAURI_RUNTIME}}' 'frontend/electron/resources/runtime/jre'; Write-Host 'Copied JRE from {{.TAURI_RUNTIME}}' } else { Write-Warning 'JRE source not found at {{.TAURI_RUNTIME}} — run task desktop:jlink first' }; if (Test-Path '{{.TAURI_LIBS}}') { Copy-Item -Force '{{.TAURI_LIBS}}/stirling-pdf-*.jar' 'frontend/electron/resources/libs/'; Write-Host 'Copied stirling-pdf JAR(s)' } else { Write-Warning 'JAR source not found at {{.TAURI_LIBS}} — run task desktop:jlink first' }; robocopy ocr-service frontend/electron/resources/ocr-service /MIR /XD .venv .pytest_cache __pycache__ /XF uv.lock /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null; if ($LASTEXITCODE -ge 8) { exit $LASTEXITCODE } else { exit 0 }"
         platforms: [windows]
-      - cmd: mkdir -p frontend/electron/resources/runtime frontend/electron/resources/libs && ([ -d {{.TAURI_RUNTIME}} ] && cp -r {{.TAURI_RUNTIME}} frontend/electron/resources/runtime/jre || true) && ([ -d {{.TAURI_LIBS}} ] && cp {{.TAURI_LIBS}}/stirling-pdf-*.jar frontend/electron/resources/libs/ || true)
+      - cmd: mkdir -p frontend/electron/resources/runtime frontend/electron/resources/libs frontend/electron/resources/ocr-service && ([ -d {{.TAURI_RUNTIME}} ] && rm -rf frontend/electron/resources/runtime/jre && cp -r {{.TAURI_RUNTIME}} frontend/electron/resources/runtime/jre && echo "Copied JRE") || echo "WARN JRE source missing — run task desktop:jlink" && ([ -d {{.TAURI_LIBS}} ] && cp {{.TAURI_LIBS}}/stirling-pdf-*.jar frontend/electron/resources/libs/ && echo "Copied JAR") || echo "WARN JAR source missing — run task desktop:jlink"
         platforms: [linux, darwin]
 
   dev:
-    desc: "Start Electron app (Phase 1 — not yet implemented)"
+    desc: "Start Electron renderer (Vite) + shell with hot reload"
     dir: '{{.ELECTRON_DIR}}'
+    env:
+      ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
     cmds:
-      - echo "Electron dev shell lands in Phase 1D. Run task electron:typecheck to verify Phase 0 scaffold."
+      - npm run dev
+
+  pack:
+    desc: "Build unpacked Electron app (no installer; skips JRE/JAR validation)"
+    dir: '{{.ELECTRON_DIR}}'
+    env:
+      ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
+    cmds:
+      - npm run pack:win
 
   build:
-    desc: "Build Electron app for Windows (Phase 1 — not yet implemented)"
+    desc: "Build Windows NSIS installer (requires desktop:jlink + bundle-resources)"
+    deps: [bundle-resources]
     dir: '{{.ELECTRON_DIR}}'
+    env:
+      ELECTRON_MIRROR: "https://npmmirror.com/mirrors/electron/"
     cmds:
-      - echo "Electron production build lands in Phase 1D. Run task electron:bundle-resources after desktop:jlink."
+      - npm run build:win

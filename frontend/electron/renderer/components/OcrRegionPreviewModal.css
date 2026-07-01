@@ -1,0 +1,130 @@
+.ocr-region-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 55%);
+}
+
+.ocr-region-modal {
+  width: min(920px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border-radius: 12px;
+  background: var(--panel-bg, #1e1e1e);
+  color: var(--text, #f5f5f5);
+  box-shadow: 0 24px 48px rgb(0 0 0 / 35%);
+}
+
+.ocr-region-header {
+  padding: 20px 24px 12px;
+}
+
+.ocr-region-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.ocr-region-subtitle {
+  margin: 0 0 8px;
+  opacity: 0.85;
+  word-break: break-all;
+}
+
+.ocr-region-hint {
+  margin: 0;
+  font-size: 0.92rem;
+  opacity: 0.75;
+}
+
+.ocr-region-frame {
+  position: relative;
+  margin: 0 24px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111;
+  user-select: none;
+  touch-action: none;
+}
+
+.ocr-region-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ocr-region-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgb(20 40 80 / 45%);
+  pointer-events: none;
+}
+
+.ocr-region-shade-top {
+  top: 0;
+}
+
+.ocr-region-shade-bottom {
+  position: absolute;
+}
+
+.ocr-region-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px solid #4da3ff;
+  border-bottom: 2px solid #4da3ff;
+  pointer-events: none;
+}
+
+.ocr-region-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  margin-top: -7px;
+  border: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgb(77 163 255 / 35%) 35%,
+    rgb(77 163 255 / 85%) 50%,
+    rgb(77 163 255 / 35%) 65%,
+    transparent 100%
+  );
+  cursor: ns-resize;
+}
+
+.ocr-region-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 12px 24px 0;
+  font-size: 0.92rem;
+}
+
+.ocr-region-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px 24px;
+}
+
+.link-button {
+  border: 0;
+  background: transparent;
+  color: #7eb6ff;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}

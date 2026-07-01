@@ -1,0 +1,25 @@
+{
+  "id": "marx_intro_scan_snippet",
+  "description": "Marx intro scan snippet — end-to-end Paddle golden (add page.png locally)",
+  "lang": "ch",
+  "mode": "high-quality",
+  "image": "page.png",
+  "expected": "expected.txt",
+  "min_similarity": 0.88,
+  "must_contain": [
+    "民族",
+    "马克思主义",
+    "中国共产党",
+    "伟大复兴",
+    "中国化时代化"
+  ],
+  "must_not_contain": [
+    "^",
+    "|",
+    "..:",
+    "马克患",
+    "改姜",
+    "⺠",
+    "⻢"
+  ]
+}

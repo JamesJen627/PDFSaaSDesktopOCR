@@ -330,6 +330,11 @@ aiEngine:
   url: http://localhost:5001 # URL of the Python AI engine
   timeoutSeconds: 120 # Timeout in seconds for AI engine requests
 
+ocrService:
+  enabled: true
+  url: http://localhost:5002
+  timeoutSeconds: 300
+
 pdfEditor:
   fallback-font: classpath:/static/fonts/NotoSans-Regular.ttf # Override to point at a custom fallback font
   cache:

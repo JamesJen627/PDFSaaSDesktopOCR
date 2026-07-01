@@ -77,6 +77,7 @@ public class ApplicationProperties {
     private ProcessExecutor processExecutor = new ProcessExecutor();
     private PdfEditor pdfEditor = new PdfEditor();
     private AiEngine aiEngine = new AiEngine();
+    private OcrService ocrService = new OcrService();
     private Mcp mcp = new Mcp();
     private InternalApi internalApi = new InternalApi();
     private Cluster cluster = new Cluster();
@@ -300,6 +301,14 @@ public class ApplicationProperties {
          * explicitly requests it via {@code AiEngineClient.postWithTimeout}.
          */
         private int longRunningTimeoutSeconds = 600;
+    }
+
+    /** PDFSaaS Desktop OCR — local PaddleOCR Python service (default port 5002). */
+    @Data
+    public static class OcrService {
+        private boolean enabled = true;
+        private String url = "http://localhost:5002";
+        private int timeoutSeconds = 300;
     }
 
     /**

@@ -1,0 +1,35 @@
+{
+  "id": "marx_intro_scan_snippet",
+  "description": "User-reported scan OCR snippet (Marx intro) — post-process regression only",
+  "lang": "ch",
+  "min_confidence": 0.45,
+  "raw_boxes": [
+    { "text": "个⺠族要⾛在时代前列,就⼀刻不能没有理论思维,⼀刻不能没有", "confidence": 0.93 },
+    { "text": "思想指引|", "confidence": 0.91 },
+    { "text": "^", "confidence": 0.88 },
+    { "text": "⻢克思主义是我们认识世界^把握规律、.:追求真理、改造世界", "confidence": 0.92 },
+    { "text": "的强⼤思想武器,它是科学的理论、⼈⺠的理论、实践的理论⼂不断发展", "confidence": 0.90 },
+    { "text": "的开放的理论,⾃诞⽣以来就始终占据着真理和道义的制⾼点。⻢克患主", "confidence": 0.89 },
+    { "text": "义不仅深刻改变了世界,也深刻改姜了中国。拥有⻢克思主义科学理论指", "confidence": 0.91 },
+    { "text": "·导是中国共产党坚定信仰信念⼂把握历史主动的根本所在,是中国共产党", "confidence": 0.90 },
+    { "text": "鲜明的政治品格和强⼤的政治优势。历史和现实反复证明,⻢克思主义只", "confidence": 0.92 },
+    { "text": "有中国化时代化才能在中国⼤地上闪耀真理光芒,也只有实现中国化时代", "confidence": 0.91 },
+    { "text": "化才能救中国、发展中国,才能实现中华⺠族的伟⼤复兴。", "confidence": 0.93 }
+  ],
+  "must_contain": [
+    "民族",
+    "马克思主义",
+    "中国共产党",
+    "伟大复兴",
+    "中国化时代化"
+  ],
+  "must_not_contain": [
+    "^",
+    "|",
+    "..:",
+    "马克患",
+    "改姜",
+    "⺠",
+    "⻢"
+  ]
+}

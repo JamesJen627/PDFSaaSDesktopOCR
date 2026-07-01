@@ -567,6 +567,19 @@ public class EndpointConfiguration {
         /* OCRmyPDF */
         addEndpointToGroup("OCRmyPDF", "ocr-pdf");
 
+        /* PaddleOCR — PDFSaaS Desktop OCR extension (Python service on port 5002) */
+        addEndpointToGroup("PaddleOCR", "ocr-health");
+        addEndpointToGroup("PaddleOCR", "ocr-process");
+        addEndpointToGroup("PaddleOCR", "ocr-warmup");
+        addEndpointToGroup("PaddleOCR", "ocr-batch");
+        addEndpointToGroup("PaddleOCR", "ocr-batch-from-pdf");
+        addEndpointToGroup("PaddleOCR", "ocr-result");
+        addEndpointToGroup("PaddleOCR", "ocr-rendered-page");
+        addEndpointToGroup("PaddleOCR", "pdf-double-layer");
+        addEndpointToGroup("PaddleOCR", "pdf-preview-page");
+        addEndpointToGroup("Other", "ocr-process");
+        addEndpointToGroup("Other", "ocr-health");
+
         // Multi-tool endpoints - endpoints that can be handled by multiple tools
         addEndpointAlternative("repair", "qpdf");
         addEndpointAlternative("repair", "Ghostscript");
@@ -632,6 +645,10 @@ public class EndpointConfiguration {
         if (!applicationProperties.getSystem().isEnableUrlToPDF()) {
             disableEndpoint("url-to-pdf");
         }
+
+        if (!applicationProperties.getOcrService().isEnabled()) {
+            disableGroup("PaddleOCR");
+        }
     }
 
     public Set<String> getEndpointsForGroup(String group) {
@@ -650,6 +667,7 @@ public class EndpointConfiguration {
                 || "Ghostscript".equals(group)
                 || "LibreOffice".equals(group)
                 || "tesseract".equals(group)
+                || "PaddleOCR".equals(group)
                 || "CLI".equals(group)
                 || "Python".equals(group)
                 || "OpenCV".equals(group)

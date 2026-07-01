@@ -1,0 +1,93 @@
+version: '3'
+
+tasks:
+  install:
+    desc: "Install OCR service dependencies"
+    dir: ocr-service
+    run: once
+    cmds:
+      - uv python install 3.13.8
+      - uv sync
+    sources:
+      - pyproject.toml
+    status:
+      - test -d .venv
+
+  dev:
+    desc: "Start OCR service on port 5002"
+    dir: ocr-service
+    deps: [install]
+    env:
+      PYTHONUNBUFFERED: "1"
+    cmds:
+      - uv run uvicorn pdfsaas_ocr.api.app:app --host 127.0.0.1 --port 5002 --reload
+
+  lint:
+    desc: "Lint OCR service"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run ruff check .
+
+  typecheck:
+    desc: "Typecheck OCR service"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run pyright .
+
+  test:
+    desc: "Run OCR service tests"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run pytest tests
+
+  test:golden:
+    desc: "Run golden OCR post-process regression tests"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run pytest tests/test_golden_cjk.py tests/test_golden_compare.py -q
+
+  test:golden:e2e:
+    desc: "Run golden Paddle OCR e2e tests (requires paddle group + local page.png)"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run pytest tests/test_golden_e2e.py -q
+
+  golden:run:
+    desc: "Compare Paddle OCR output against golden expected.txt"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run python scripts/golden_run.py {{.CLI_ARGS}}
+
+  golden:prepare:
+    desc: "Scaffold a golden e2e case from image + expected.txt"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run python scripts/golden_prepare.py {{.CLI_ARGS}}
+
+  golden:diff:
+    desc: "Diff two OCR text files with optional similarity threshold"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv run python scripts/golden_diff.py {{.CLI_ARGS}}
+
+  check:
+    desc: "Full OCR service quality gate"
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test
+
+  install:paddle:
+    desc: "Install PaddleOCR optional dependency group"
+    dir: ocr-service
+    deps: [install]
+    cmds:
+      - uv sync --group paddle

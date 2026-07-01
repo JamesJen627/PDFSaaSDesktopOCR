@@ -53,6 +53,17 @@ export function resolveResourcesDir(): string {
   if (process.env.ELECTRON_RESOURCES_DIR) {
     return path.resolve(process.env.ELECTRON_RESOURCES_DIR);
   }
-  // Dev default relative to compiled main output: frontend/electron/resources/dev
-  return path.resolve(moduleDir, "..", "resources", "dev");
+
+  const resourcesRoot = path.resolve(moduleDir, "..", "resources");
+  const devDir = path.join(resourcesRoot, "dev");
+
+  if (fs.existsSync(path.join(devDir, "runtime", "jre"))) {
+    return devDir;
+  }
+
+  if (fs.existsSync(path.join(resourcesRoot, "runtime", "jre"))) {
+    return resourcesRoot;
+  }
+
+  return devDir;
 }

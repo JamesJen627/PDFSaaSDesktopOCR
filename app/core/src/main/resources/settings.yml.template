@@ -367,6 +367,11 @@ aiEngine:
   url: http://localhost:5001 # URL of the Python AI engine
   timeoutSeconds: 120 # Timeout in seconds for AI engine requests
 
+ocrService:
+  enabled: true # PDFSaaS Desktop OCR — proxy to local PaddleOCR service
+  url: http://localhost:5002 # URL of the Python OCR service (see ocr-service/)
+  timeoutSeconds: 300 # Per-page OCR can be slow on first model load
+
 policies:
   # Folder automations can read from and write to the directories you allow here, so treat this as a
   # security boundary. Leave allowedFolderRoots empty (default) to disable folder sources/outputs

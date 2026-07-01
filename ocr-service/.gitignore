@@ -1,0 +1,9 @@
+.venv/
+.pytest_cache/
+__pycache__/
+.ruff_cache/
+*.pyc
+tests/fixtures/golden/e2e/**/page.png
+tests/fixtures/golden/e2e/**/actual.txt
+tests/fixtures/golden/e2e/**/*.jpg
+tests/fixtures/golden/e2e/**/*.jpeg

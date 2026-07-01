@@ -63,6 +63,15 @@ public final class PageColumnLayout {
      * side tallies all end up classified as "spanning", falling to single-column.
      */
     public static PageColumnLayout fromLineBoxes(List<float[]> lineBoxes, float pageWidth) {
+        return fromLineBoxes(lineBoxes, pageWidth, MIN_COLUMN_LINE_WIDTH_PT, MIN_SIDE_LINES);
+    }
+
+    /**
+     * Like {@link #fromLineBoxes(List, float)} but allows tuning for OCR pixel coordinates where
+     * line widths and side counts use different scales than PDF points.
+     */
+    public static PageColumnLayout fromLineBoxes(
+            List<float[]> lineBoxes, float pageWidth, float minLineWidth, int minSideLines) {
         if (lineBoxes == null || lineBoxes.isEmpty()) {
             return new PageColumnLayout(List.of(new float[] {0f, pageWidth}), List.of());
         }
@@ -71,14 +80,12 @@ public final class PageColumnLayout {
         for (float[] lb : lineBoxes) {
             if (lb == null || lb.length < 3) continue;
             float width = lb[2] - lb[0];
-            // Skip narrow lines — dates, page numbers, "Link" labels next to a heading should
-            // not, on their own, make a single-column doc look two-column.
-            if (width < MIN_COLUMN_LINE_WIDTH_PT) continue;
+            if (width < minLineWidth) continue;
             float mid = (lb[0] + lb[2]) * 0.5f;
             if (mid < pageMid - MIDPOINT_SLACK_PT) left++;
             else if (mid > pageMid + MIDPOINT_SLACK_PT) right++;
         }
-        if (left < MIN_SIDE_LINES || right < MIN_SIDE_LINES) {
+        if (left < minSideLines || right < minSideLines) {
             return new PageColumnLayout(List.of(new float[] {0f, pageWidth}), List.of());
         }
         float gutterL = pageMid - MIDPOINT_SLACK_PT;
